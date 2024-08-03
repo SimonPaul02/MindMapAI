@@ -1,0 +1,7 @@
+openai
+grpcio
+grpcio-tools
+protobuf
+pydantic
+langchain
+langchain-openai

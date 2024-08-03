@@ -1,0 +1,41 @@
+version: "3"
+services:
+  task_template:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_poetry
+    ports:
+      - 0.0.0.0:8070:8061
+      - 8062:8062
+    networks:
+      - mynetwork
+    environment:
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_KEY=${SSL_KEY}
+    # volumes:
+    #   - ./task_template:/usr/project/task_template
+    #   - /usr/project/node_modules
+  model_template:
+    build: ./model_template
+    ports:
+      - 0.0.0.0:8072:8061
+    networks:
+      - mynetwork
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+  model_handler_template:
+    build: ./model_handler_template
+    ports:
+      - 0.0.0.0:8071:8061
+    networks:
+      - mynetwork
+  orchestrator:
+    depends_on:
+      - task_template
+      - model_template
+      - model_handler_template
+    build: ./orchestrator
+    networks:
+      - mynetwork
+networks:
+  mynetwork:

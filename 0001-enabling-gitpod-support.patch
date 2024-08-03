@@ -1,0 +1,43 @@
+From 1757d57b12a2e37a012facc4f0ecdafac5c1462d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?FloM=C3=BC?= <florian.mueller@um.ifi.lmu.de>
+Date: Thu, 4 Jul 2024 09:39:06 +0200
+Subject: [PATCH] enabling gitpod support
+
+---
+ .gitpod.yml                 | 11 +++++++++++
+ task_template/entrypoint.sh |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+ create mode 100644 .gitpod.yml
+
+diff --git a/.gitpod.yml b/.gitpod.yml
+new file mode 100644
+index 0000000..6d4a7be
+--- /dev/null
++++ b/.gitpod.yml
+@@ -0,0 +1,11 @@
++tasks:
++  - command: |
++      docker compose -f docker-compose_poetry.yaml up --build
++
++ports:
++  - port: 8062
++    onOpen: open-browser
++
++vscode:
++  extensions:
++    - ms-azuretools.vscode-docker
+diff --git a/task_template/entrypoint.sh b/task_template/entrypoint.sh
+index 3af0734..5100751 100644
+--- a/task_template/entrypoint.sh
++++ b/task_template/entrypoint.sh
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ echo "$SSL_CERTIFICATE" >> cert.pem
+ echo "$SSL_KEY" >> key.pem
+-uvicorn main:app --ssl-keyfile /usr/project/key.pem --ssl-certfile /usr/project/cert.pem --port 8062 --host 0.0.0.0
+\ No newline at end of file
++uvicorn main:app --port 8062 --host 0.0.0.0
+\ No newline at end of file
+-- 
+2.44.0.windows.1
+

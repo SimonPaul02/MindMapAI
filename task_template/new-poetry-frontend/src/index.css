@@ -1,0 +1,247 @@
+:root {
+  --dark-bg: #121212;
+  --lighter-bg: #1e1e1e;
+  --text-color: #ffffff;
+  --border-color: #333;
+  --font-family: 'Roboto', sans-serif;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+textarea {
+  width: 630px;
+  height: 50px;
+  background-color: var(--border-color);
+  color: var(--text-color);
+  border: 1px solid #555;
+}
+
+body, html {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--dark-bg);
+  color: var(--text-color);
+}
+
+/* Container styles for main interaction area */
+.main-interaction {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  height: calc(100vh - 160px);
+  justify-content: flex-start;
+  background-color: var(--dark-bg);
+}
+
+/* Container styles for content boxes */
+.content-boxes {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  align-items: stretch;
+  margin-bottom: 10px;
+  height: 75%;
+}
+
+/* Shared styles for all boxes */
+.suggestion-box, .fulltext-box, .mindmap-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 5px;
+  font-size: 16px;
+  height: 100%;
+  position: relative;
+  background-color: var(--lighter-bg);
+  color: var(--text-color);
+}
+
+/* Specific styles for suggestion box */
+.suggestion-box {
+  width: 25%;
+}
+
+/* Specific styles for fulltext box */
+.fulltext-box {
+  width: 25%;
+}
+
+/* Specific styles for mindmap box */
+.mindmap-box {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Shared styles for box contents */
+.suggestion-box-content, .fulltext-box-content, .mindmap-box-content {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: justify;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background-color: var(--lighter-bg);
+}
+
+/* Editable content styles */
+.editable-content {
+  margin: 0;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  text-align: justify;
+  max-width: 100%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  outline: none;
+  border: none;
+  resize: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.editable-content:empty:before {
+  content: attr(data-placeholder);
+  color: #555;
+  pointer-events: none;
+}
+
+/* Center placeholder text when no content is present */
+.suggestion-box-content.empty .editable-content, .fulltext-box-content.empty .editable-content {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+}
+
+.placeholder-text {
+  color: #888383;
+}
+
+/* Styles for input box */
+.input-box {
+  width: 50%;
+  height: 50px;
+  padding: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  resize: none;
+  margin: 0 10px; /* Adjust margin to fit within the flex container */
+  display: block;
+  font-size: 16px;
+  background-color: var(--lighter-bg);
+  color: var(--text-color);
+}
+
+/* Title styles */
+.box-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px 0;
+  text-align: center;
+  position: relative;
+  z-index: 11;
+  color: var(--text-color);
+}
+
+/* Ensure text is fully visible */
+.suggestion-box p, .fulltext-box p {
+  white-space: pre-wrap;
+}
+
+/* Enable scrolling for suggestion and fulltext boxes */
+.suggestion-box, .fulltext-box {
+  overflow-y: auto;
+}
+
+/* Overlay styles */
+.overlay {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 18, 18, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.overlay-textarea {
+  width: 90%;
+  height: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  resize: none;
+  background-color: var(--border-color);
+  color: var(--text-color);
+}
+
+/* Button group styles */
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensure items are vertically centered */
+  margin-top: 20px; /* Add top margin */
+}
+
+.button-group .new-button {
+  margin: 0 10px;
+}
+
+.button-group .input-box {
+  margin: 0 10px;
+  width: auto;
+  flex-grow: 1; /* Allow the input box to grow */
+}
+
+/* Button styles */
+.new-button {
+  display: block;
+  width: 150px;
+  height: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #555; /* Match the border style */
+  border-radius: 10px; /* Match the border-radius */
+  background-color: var(--lighter-bg); /* Match the background color */
+  color: var(--text-color);
+  transition: background-color 0.3s ease;
+}
+
+.new-button:hover {
+  background-color: #333; /* Slightly lighter on hover */
+}
+
+/* Add spacing for task description */
+.task-description {
+  margin: 20px; /* Add margin */
+  padding: 10px;
+  color: var(--text-color);
+  border-radius: 5px;
+}

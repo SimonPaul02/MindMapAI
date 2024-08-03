@@ -1,0 +1,46 @@
+// This is a placeholder for now, but we will likely create a interaction between model supplier and 
+// tasks, so that users do not need to create the model handling
+
+syntax = "proto3";
+
+// Task Input (the string needss to be a json encoding data)
+// Structure is: 
+// { "data" : { "text" : [ { "role" : "user|assistant", "content" : "Content" } ... ], "image" : "base64 encoded image", "system" : "The system prompt for the model" } }
+message modelRequest { 
+    string request = 1;  
+    string modelID = 2; 
+    string sessionID = 3;
+}
+// The answer (again a json)
+// the answer is a json object with the following structure
+// { "data" : { "text" : "Some text returned by the model", "image" : "base64 encoded image returned by the model, if any" } }
+message modelAnswer { 
+    string answer = 1;   
+    string sessionID = 2; 
+}
+
+// define model Properties
+message modelDefinition {
+    bool needs_text = 1;
+    bool needs_image = 2;
+    bool can_text = 3;
+    bool can_image = 4;
+    string modelID = 5;
+}
+
+// the metrics Json (a json object properly formatted for the metrics)
+message metricsJson { 
+    string metrics = 1;   
+    string modelID = 2;
+}
+
+message Empty {
+    
+}
+
+service Model {
+    rpc predict(modelRequest) returns (Empty);
+    rpc sendPrediction(Empty) returns (stream modelAnswer);
+    rpc publishMetrics(metricsJson) returns (Empty); 
+    rpc registerModel(Empty) returns (modelDefinition);
+}

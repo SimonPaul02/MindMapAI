@@ -1,0 +1,46 @@
+{
+    "listeners": {
+        "*:8062": {            
+            "pass": "routes"
+        }
+    },
+    "routes": [
+        {
+            "match": {
+                "uri": "/api/*"
+            },
+            "action": {                
+                "pass": "applications/fastapi"
+            }
+        },
+        {
+            "match": {
+                "uri": "*"
+            },
+            "action": {
+                "share": ["/frontend$uri","/frontend/index.html"],
+                "index": "index.html",
+                "response_headers": {
+                    "Cross-Origin-Embedder-Policy": "require-corp",
+                    "Cross-Origin-Opener-Policy": "same-origin",
+                    "Cross-Origin-Resource-Policy": "same-origin",
+                    "Permissions-Policy": "interest-cohort=()"
+                }
+            }
+        }
+
+    ],
+    "applications": {
+        "fastapi": {
+            "type": "python 3.11",
+            "module": "asgi",     
+            "home": "/opt/venv",       
+            "path": "/app",
+            "callable": "app"
+        }
+    },
+    "access_log": {
+        "path": "/logging/access.log",
+        "format": "$remote_addr - - [$time_local] \"$request_line\" $status $body_bytes_sent \"$header_referer\" \"$header_user_agent\""
+    }
+}

@@ -1,0 +1,6 @@
+uvicorn
+grpcio
+grpcio-tools
+grpcio-reflection
+protobuf
+google

@@ -1,0 +1,10 @@
+fastapi
+openai
+uvicorn
+grpcio
+grpcio-tools
+protobuf
+pydantic
+langchain
+langchain-openai
+itsdangerous

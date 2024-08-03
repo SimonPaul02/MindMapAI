@@ -1,0 +1,30 @@
+# Dockerfile
+FROM python:3.9
+
+WORKDIR /usr/project
+
+COPY ./app/requirements.txt .
+
+RUN apt-get update -y 
+RUN apt-get install -y python3-pip python3-dev
+RUN pip3 install --upgrade pip
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
+
+# Install NVM and node
+COPY ./app .
+# Install frontend, clear dist folder
+COPY ./frontend/dist/godot_games/tangram ./dist
+RUN mv ./dist/tangram.html ./dist/index.html
+COPY entrypoint.sh .
+RUN useradd appuser
+RUN chown -R appuser:appuser /usr/project
+RUN chmod 755 /usr/project
+
+USER appuser
+
+EXPOSE 8062
+EXPOSE 8061
+
+ENV OPENAI_API_KEY="PROVIDE_EXERNALLY"
+# Need to change this into a script file, which also generates the secret keys... 
+CMD ["sh", "entrypoint.sh"]

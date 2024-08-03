@@ -1,0 +1,44 @@
+# Dockerfile
+FROM python:3.9
+
+WORKDIR /usr/project
+
+COPY ./app/requirements.txt .
+
+RUN apt-get update -y 
+RUN apt-get install -y python3-pip python3-dev
+RUN pip3 install --upgrade pip
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
+
+# Install NVM and node
+COPY get_nvm.sh .
+ENV NODE_VERSION 18.12.1
+ENV NVM_DIR /usr/local/nvm
+# The node version here might need to be adapted over time!
+RUN mkdir -p $NVM_DIR && ./get_nvm.sh  \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install node $NODE_VERSION \
+    && nvm use node
+# Set NODE environment variables
+ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+# COPY frontend code
+COPY ./frontend ./frontend
+# COPY backend code
+COPY ./app .
+# Install frontend, clear dist folder
+RUN cd frontend && npm install && npm run build && ls && pwd && mv dist ../ && cd .. && rm -r frontend
+
+COPY entrypoint.sh .
+RUN useradd appuser
+RUN chown -R appuser:appuser /usr/project
+RUN chmod 755 /usr/project
+
+USER appuser
+
+EXPOSE 8062
+EXPOSE 8061
+
+ENV OPENAI_API_KEY="PROVIDE_EXERNALLY"
+# Need to change this into a script file, which also generates the secret keys... 
+CMD ["sh", "entrypoint.sh"]

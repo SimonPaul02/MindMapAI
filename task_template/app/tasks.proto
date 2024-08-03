@@ -1,0 +1,48 @@
+// This is a placeholder for now, but we will likely create a interaction between model supplier and 
+// tasks, so that users do not need to create the model handling
+// A Model Container needs to implement one of the following methods
+
+syntax = "proto3";
+
+// A model Request. The request must follow the following (textual) json conversion
+// { "text" : [ { "role" : "user|assistant", "content" : "Content" } ... ], 
+//   "image" : "base64 encoded image", 
+//   "system" : "The system prompt for the model" } 
+message taskRequest { 
+    string request = 1;   
+    string sessionID = 2;    
+}
+// The answer (again a json)
+// the answer is a json object with the following structure
+// { "text" : "Some text returned by the model", 
+//   "image" : "base64 encoded image returned by the model, if any" } 
+message modelAnswer { 
+    string answer = 1;
+    string sessionID = 2;
+}
+
+// define model Properties
+message modelRequirements {
+    bool needs_text = 1;
+    bool needs_image = 2;
+    string sessionID = 3;
+}
+
+
+// the metrics Json (a json object properly formatted for the metrics)
+message taskMetrics {    
+    string sessionID = 1;
+    string metrics = 2;   
+}
+
+message Empty {
+
+}
+
+
+service taskService {
+    rpc startTask(Empty) returns (stream modelRequirements); 
+    rpc runTask(Empty) returns (stream taskRequest); 
+    rpc finishTask(Empty) returns (stream taskMetrics);
+    rpc getModelResponse(modelAnswer) returns (Empty);
+}
