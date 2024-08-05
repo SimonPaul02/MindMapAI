@@ -1,0 +1,11 @@
+tasks:
+  - command: |
+      docker compose -f docker-compose_poetry.yaml up --build
+
+ports:
+  - port: 8062
+    onOpen: open-browser
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker

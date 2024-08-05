@@ -1,55 +1,87 @@
-# IMPORTANT: For Hackathon participants
-In the hackathon, the 3 main things you need to edit to adjust to your own task are the prompt, the frontend, and the model selection. However, if you want, feel free to explore the other parts of the system as well. We appreciate any feedback and suggestions that you might have for the Collaborative AI arena!
 
-## Prompt:
-The prompt for the task is located inside [poetry.py](task_template/app/task_examples/poetry.py) in the `get_system_prompt` function. Currently, the function receives a parameter called `objective`, which serves as the theme/topic for the poem, and returns the prompt. 
+# MindMapAI
 
-Although the current prompt serves as a starting point for your task, it's by no means optimized. Because of that, we highly recommend you to experiment and do some prompt engineering for it to fit whatever task you have in mind.
+![MindMapAI Logo](MindMapAI.png)
 
-## Frontend:
-The frontend for the hackathon is based on our poetry task, rewritten in ReactJS. The main idea of the task is that the user submits the theme/objective for the poem and then they collaborate with the model to complete it. However, This task is not limited to poem writing only as you can freely switch between a line-by-line rendering (poem) or a continuous rendering (paragraph). For a more detailed explanation, please go [here](task_template/new-poetry-frontend/README.md)
+This repo is a fork of the AI and I Hackathon: Co-Creativity between Humans and LLMs, organized by fortiss and the partners: Start2 Group, LMU Munich, DFKI, and Humane AI Net.
 
-## Model selection:
-At the moment, the system supports two models [gpt4-turbo](model_template/models/openAI_model.py) and [gpt4-o](model_template/models/openAI_image_model.py), which is located inside the folder [model_template/models](model_template/models). 
+## Prerequisites
+
+Ensure you have Docker and Docker Compose installed on your machine. You can download them from:
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+To run locally you will need docker installed!
+
+You also need the following environment variables set:
+
+- `OPENAI_API_KEY` - an OpenAI access key.
+- `SSL_KEY` - a valid OpenSSL certificate key
+- `SSL_CERTIFICATE` - a valid OpenSSL certificate
+
+Create a .env file where you store your certificates and credentials in the root folder.
+
+1. **Create a directory for the SSL certificate:**
+
+    ```sh
+    mkdir certs
+    ```
+
+2. **Generate a self-signed SSL certificate and key:**
+
+    ```sh
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/selfsigned.key -out certs/selfsigned.crt
+    ```
+
+In the .env file, you can reference the respective files.
+
+## Project Structure
+
+### Prompts
+The prompts for the agents are located inside [task-examples](task_template/app/task_examples/).
+
+### Frontend
+The frontend for the hackathon is based on our poetry task, rewritten in ReactJS. The main idea of the task is that the user submits the theme/objective at the of the mindmap and then collaborotively (with AI) extends the mindmap. During the process. From the mindmap, our agent will create a text.
+
+### Model Selection
+At the moment, the system supports two models [gpt4-turbo](model_template/models/openAI_model.py) and [gpt4-o](model_template/models/openAI_image_model.py), which is located inside the folder [model_template/models](model_template/models).
 
 You can change between the two models by changing the value of the variable `ai_model` between `OpenAIImageModel()` and `OpenAIModel()` in the file [model_template/model.py](model_template/model.py).
 
 If you have time and want to add your own models to the system, feel free to do so by following the template located in the file [basemodel.py](model_template/models/basemodel.py) and use the already existing model files as guidance.
-<br/> <br />
-___
 
-# Collaborative AI Arena
-
-The collaborative AI arena is intended to serve as a basis for evaluation of collaboration between AI and Humans. The idea is to design and evaluate tasks which are performed with input from both sides, and figure out if the collaboration was successful.
-Users should be presented with a task that they perform together with the AI and metric should be used to evaluate the different
-
-This repository contains most of the code necessary to add a Model or a Task.
-
-## Templates
-
+### Templates
 The `task_template` and `model_template` folders contain template applications for deployment on the AI Builder infrastructure.
 They indicate how to implement a model and a task and supply most infrastructure necessary to minimise the requirements of a user to adopt their code.
 Details are provided in the respective README files.
 
-## Local testing
+## Building, Running, and Stopping the Application
 
-To test things locally and see if they work, we provide a docker compose file along with a simple orchestrator.
+### Building the Application
 
-To run locally you will need docker installed!
+To build the application, run:
+```sh
+docker compose -f docker-compose_poetry.yaml build
+```
+from the root directory.
 
-To run, you need docker installed.  
-You also need the following environment variables set:
 
-- `OPENAI_API_KEY` - a openAI access key.
-- `SSL_KEY` - a valid openssl certficate key
-- `SSL_CERTIFICATE` - a valid openssl certificate
+### Building the Application
 
-The template model currently uses an Aalto specific endpoint for computation.
-You will likely need to change the model used in `model_template/model.py` to an OpenAI model and use that for testing.
+To run the application, run:
 
-We provide two tasks that can be used, either a poetry task or a tangram task. To run them call:
-`docker compose -f docker-compose_tangram.yaml up --build` for the tangram task and  
-`docker compose -f docker-compose_poetry.yaml up --build` for the poetry task respectively
-only one of the tasks can be run at the same time.
+```sh
+docker compose -f docker-compose_poetry.yaml up --force-recreate
+```
+from the root directory.
 
-After that, the frontend should be accessible via https://localhost:8062.
+### Stop the Application
+
+To stop the application, run:
+
+```sh
+docker compose -f docker-compose_poetry.yaml down
+```
+from the root directory.
+
+
